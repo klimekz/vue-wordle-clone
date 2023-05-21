@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { ref, Ref } from "vue";
+import { onMounted, ref, Ref } from "vue";
 import { getAuth } from "firebase/auth";
 import { initializeApp, FirebaseApp } from "firebase/app";
 import { getFirestore, Firestore, setDoc, doc } from "firebase/firestore";
@@ -125,6 +125,8 @@ const enterInputHandler = () => {
         swal("Please enter a 5 character word.")
     }
 }
+
+onMounted(() => { document.getElementById('input')?.focus() })
 </script>
 
 <template>
@@ -139,7 +141,7 @@ const enterInputHandler = () => {
         }}</span>
     </div>
     <br />
-    <input type="text" @click="inputClickedHandler" ref="guessText" />
+    <input id="input" type="text" @click="inputClickedHandler" ref="guessText" />
     <!-- conditionally disable source: https://www.w3docs.com/snippets/vue-js/how-to-disable-input-conditionally-in-vue-js.html -->
     <button id="enterGuessBtn" :disabled="checkBtn === false" @click="enterInputHandler">Check</button>
     <br />
@@ -165,6 +167,10 @@ const enterInputHandler = () => {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+#input {
+    height: 2em;
 }
 
 #enterGuessBtn {
