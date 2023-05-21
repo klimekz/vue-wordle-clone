@@ -10,7 +10,7 @@ npm install word-exists --save
 
 npm install firebase
 
-    Create 'firebaseConfig.ts' with unique Firebase Credentials.
+ * Create 'firebaseConfig.ts' with unique Firebase Credentials.
     
 npm install random-words
 
