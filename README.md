@@ -15,3 +15,5 @@ npm install firebase
     
 npm install random-words
 
+npm install --save vue-router@4
+
