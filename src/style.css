@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: rgba(241, 231, 231, 0.87);
+  background-color: #f9f9f9;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -32,7 +32,7 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.3em;
   line-height: 1.1;
 }
 
@@ -69,12 +69,42 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #F5F7FA;
   }
   a:hover {
     color: #747bff;
   }
   button {
     background-color: #f9f9f9;
+    border: solid 1px gray;
   }
 }
+
+/* https://mdbootstrap.com/docs/standard/extended/colors-code/ */
+.primaryBtn {
+    background-color: #3B71CA;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+/* https: //mdbootstrap.com/docs/standard/extended/colors-code/ */
+.secondaryBtn {
+    background-color: #9FA6B2;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+/* https: //mdbootstrap.com/docs/standard/extended/colors-code/ */
+.dangerBtn {
+    background-color: #DC4C64;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+.successBtn {
+    background-color: #14A44D;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+
