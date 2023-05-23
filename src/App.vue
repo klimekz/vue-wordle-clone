@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import Wordle from './components/Wordle.vue'
 </script>
 
 <template>
   <h1>Wordle Clone: Vue.js</h1>
-  <Wordle />
+  <router-view />
 </template>
 
 <style scoped></style>

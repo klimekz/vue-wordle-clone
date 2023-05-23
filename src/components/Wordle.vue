@@ -1,27 +1,37 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { onMounted, ref, Ref } from "vue";
-import { getAuth } from "firebase/auth";
+import { computed, onMounted, ref, Ref } from "vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp, FirebaseApp } from "firebase/app";
 import { getFirestore, Firestore, setDoc, doc } from "firebase/firestore";
 import swal from "sweetalert";
 import randomWords from "random-words";
 import wordExists from "word-exists";
-
 import firebaseConfig from "../../firebaseConfig";
+import { useRouter, RouterLink } from "vue-router";
 
 const app: FirebaseApp = initializeApp(firebaseConfig);
-const db: Firestore = getFirestore(app)
+const db: Firestore = getFirestore(app);
 
 let answer = ref("");
 let startTime: string = "";
 let endTime: string = "";
+
+const auth = getAuth(app);
+const router = useRouter();
+
+const username: Ref<string | null> = ref(null);
+
+onAuthStateChanged(auth, () => {
+    auth.currentUser ? username.value = auth.currentUser.uid : username.value = null;
+})
 
 // https://www.npmjs.com/package/random-words
 do {
     answer.value = randomWords({ exactly: 1, maxLength: 5 })[0].toUpperCase();
 } while (answer.value.length != 5)
 
+console.log(answer)
 const userGuesses: Ref<string[]> = ref([]);
 let guessText = ref("");
 let guessCount: number = 0;
@@ -31,6 +41,13 @@ let showWord = ref(false);
 const inputClickedHandler = () => {
     if (startTime == "") {
         startTime = dayjs().toISOString();
+    }
+}
+
+const signOutHandler = () => {
+    if (auth.currentUser) {
+        auth.signOut();
+        username.value = null;
     }
 }
 
@@ -100,7 +117,7 @@ const getClass = (index: number, guesses: string[]): string => {
     }
 }
 
-const showWordHandler = () => { showWord.value = !showWord.value }
+// const showWordHandler = () => { showWord.value = !showWord.value }
 
 const enterInputHandler = () => {
     let guess: string = guessText.value.value;
@@ -130,9 +147,11 @@ onMounted(() => { document.getElementById('input')?.focus() })
 </script>
 
 <template>
-    <button id="newGameBtn" @click="newGameHandler">New Game</button>
-    <button v-show="!showWord" id="showWordBtn" @click="showWordHandler">Show Answer</button>
-    <button v-show="showWord" id="showWordBtn" @click="showWordHandler">Hide Answer</button>
+    <span>
+        <button class="secondaryBtn" @click="newGameHandler">New Game</button>
+        <RouterLink v-show="username" to="stats"> <button class="secondaryBtn">Game Stats</button>
+        </RouterLink>
+    </Span>
     <label id="answerLabel" v-show="showWord">{{ answer }}</label>
     <br />
     <div id="boxes">
@@ -143,11 +162,50 @@ onMounted(() => { document.getElementById('input')?.focus() })
     <br />
     <input id="input" type="text" @click="inputClickedHandler" ref="guessText" />
     <!-- conditionally disable source: https://www.w3docs.com/snippets/vue-js/how-to-disable-input-conditionally-in-vue-js.html -->
-    <button id="enterGuessBtn" :disabled="checkBtn === false" @click="enterInputHandler">Check</button>
+    <button id="enterGuessBtn" :disabled="checkBtn === false" @click="enterInputHandler" class="successBtn">Check</button>
     <br />
+    <br />
+    <span v-show="!username">
+        <RouterLink to="/signup">
+            <button class="navBtn secondaryBtn ">
+                Sign Up
+            </button>
+        </RouterLink>
+        <RouterLink to="/login">
+            <button id="loginBtn" class="navBtn primaryBtn ">
+                Log In
+            </button>
+        </RouterLink>
+        <p>Log in or create an account to track your progress.</p>
+    </span>
+    <button class="dangerBtn" v-show="username" @click="signOutHandler">
+        Sign Out
+    </button>
 </template>
 
 <style scoped>
+.navBtn {
+    padding-top: .66em;
+    padding-bottom: .66em;
+    max-width: 35%;
+    min-width: 35%;
+    white-space: nowrap;
+    text-align: center;
+
+}
+
+button {
+    margin: 1em;
+}
+
+RouterLink {
+    color: white;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
 #boxes {
     /* derived from class timer example */
     display: inline-grid;
@@ -155,7 +213,7 @@ onMounted(() => { document.getElementById('input')?.focus() })
     grid-gap: 8px;
     height: 10px;
     height: 100%;
-    margin-top: 1em;
+    margin-top: 2em;
     margin-bottom: 1em;
 }
 
@@ -180,6 +238,7 @@ onMounted(() => { document.getElementById('input')?.focus() })
 #showWordBtn {
     margin-left: 1em;
     margin-right: 1em;
+
 }
 
 /* Wordle color palette source: https://www.color-hex.com/color-palette/1012607  */

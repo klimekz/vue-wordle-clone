@@ -79,3 +79,32 @@ button:focus-visible {
     border: solid 1px gray;
   }
 }
+
+/* https://mdbootstrap.com/docs/standard/extended/colors-code/ */
+.primaryBtn {
+    background-color: #3B71CA;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+/* https: //mdbootstrap.com/docs/standard/extended/colors-code/ */
+.secondaryBtn {
+    background-color: #9FA6B2;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+/* https: //mdbootstrap.com/docs/standard/extended/colors-code/ */
+.dangerBtn {
+    background-color: #DC4C64;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+.successBtn {
+    background-color: #14A44D;
+    color: white;
+    border: solid 1px gainsboro;
+}
+
+
